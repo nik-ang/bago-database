@@ -1,0 +1,48 @@
+a {
+    color: white;
+}
+
+.formTitle {
+    width: 100%;
+    height: 6em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(193, 34, 214, 0.5);
+}
+
+.formContainer {
+    background-color: rgba(161, 161, 161, 0.5);
+}
+
+.formContainer form {
+    margin-top: 1%;
+    padding-top: 2%;
+}
+
+.formContainer label {
+    font-size: 1.1em;
+}
+
+.formContainer input {
+    margin-top: 2%;
+    margin-bottom: 2%;
+    width: 50%;
+    padding: 2%;
+}
+
+.formContainer input[type=submit], .formContainer button {
+    border: none;
+    padding-top: 2%;
+    padding-bottom: 2%; 
+    color: white;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    background-color: green;
+}
+
+.message {
+    font-size: 1.1em;
+    width: 100%;
+    background-color: rgba(199, 0, 0, 0.541);
+}

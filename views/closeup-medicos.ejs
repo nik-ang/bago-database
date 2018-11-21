@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Bagó Database</title>
+	<link rel="shortcut icon" type="image/x-icon" href="/img/titleicon.png">
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<link rel="stylesheet" type="text/css" href="css/ventas.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+	<%- include('repscripts.html'); %>
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+
+			$('.main-container').hide();
+			$('.table-grid').hide();
+			$('.loadingMessage').hide();
+
+			var dataClass = $.pivotUtilities.SubtotalPivotData;
+			var renderers = $.extend($.pivotUtilities.renderers, $.pivotUtilities.plotly_renderers, $.pivotUtilities.subtotal_renderers);
+			var aggregators = $.extend($.pivotUtilities.subtotal_aggregators, $.pivotUtilities.aggregators);
+
+			var sqlCloseupMedicos = ('<%- sqlCloseupMedicos %>');
+
+			$("#report1").pivotUI(
+				JSON.parse(sqlCloseupMedicos), {
+					dataClass: dataClass,
+					aggregators: aggregators,
+					rows: ['nombre', 'matricula'],
+					cols: ['Year'],
+					aggregatorName: "Integer Sum",
+					vals: ['PXs'],
+					rendererName: "Table",
+					menuLimit: 20000
+				}
+			);
+
+			$("#report2").pivotUI(
+				JSON.parse(sqlCloseupMedicos), {
+					dataClass: dataClass,
+					aggregators: aggregators,
+					rows: ['Product'],
+					cols: ['Year', 'Month'],
+					aggregatorName: "Sum as Fraction of Columns",
+					vals: ['PXs'],
+					renderers: renderers,
+					rendererName: "Table With Subtotal Col Heatmap",
+					inclusions: {
+						'Year': ["2017", "2018"],
+					},
+					menuLimit: 20000
+				}
+			);
+
+
+
+		});
+
+		function showReport(reportName) {
+			$('.main-container').fadeIn();
+			$('.table-grid').fadeOut();
+			$('#' + reportName).fadeIn();
+		}
+
+		function filterQuery(filter, isEqualTo, report) {
+			var xhr = new XMLHttpRequest();
+			xhr.onreadystatechange = function () {
+				if (this.readyState == XMLHttpRequest.DONE) {
+					sqlCloseupMedicos = this.responseText;
+					$(`#${report}`).pivotUI(
+						JSON.parse(sqlCloseupMedicos), {
+							rows: ['nombre', 'matricula'],
+							cols: ['Year'],
+							aggregatorName: "Integer Sum",
+							vals: ['PXs'],
+							rowOrder: "value_z_to_a",
+							rendererName: "Table",
+							menuLimit: 20000
+						}
+					);
+				}
+			};
+			xhr.open("POST", "/closeup-medicos", true);
+			xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			xhr.send(`filter=${filter}&isEqualTo=${isEqualTo}`);
+			alert("Waiting for query...");
+		}
+	</script>
+
+</head>
+
+
+<body>
+
+	<div class="loadingMessage">
+		<img src="img/bouncy.gif" alt="Loading">
+	</div>
+	<div class="main-grid">
+		<% admindashboard; %>
+		<%- include('header.ejs') %>
+		<!--________________________MENU_______________________________________________ -->
+		<div class="menu-grid">
+			<div class="menubar">
+				<div onclick="showReport('tab1')">Prescriptores de Bagó</div>
+				<div onclick="showReport('tab2')">Prescripciones de Médicos</div>
+				<div onclick="showReport('tab3')">Recetas por Visitador</div>
+			</div>
+		</div>
+		<!--________________________CONTENT___________________________________________ -->
+		<div class="main-container">
+			<!--________________________TABLES 1_______________________________ -->
+			<div class="table-grid" id="tab1">
+				<div class="table-title">Prescriptores de Bagó</div>
+				<div class="queryFilter">
+					<table>
+						<tr>
+							<th>Filter by ATC</th>
+							<th>Filter by Lab</th>
+							<th>Filter by Doctor</th>
+						</tr>
+						<tr>
+							<td>
+								<select name="clase" onchange="filterQuery(this.name, this.value, 'report1')">
+									<% var ATCOptionsJSON = JSON.parse(ATCOptions); %>
+									<% for (var i = 0; i < ATCOptionsJSON.length; i++) { %>
+									<option value="<%= ATCOptionsJSON[i].clase %>">
+										<%= `${ATCOptionsJSON[i].clase} - ${ATCOptionsJSON[i].ATCName}` %>
+									</option>
+									<% } %>
+								</select>
+							</td>
+							<td>
+								<select name="desc_labo" onchange="filterQuery(this.name, this.value, 'report1')">
+									<% var LabOptionsJSON = JSON.parse(LabOptions); %>
+									<% for (var i = 0; i < LabOptionsJSON.length; i++) { %>
+									<option value="<%= LabOptionsJSON[i].lab %>">
+										<%= `${LabOptionsJSON[i].lab}` %>
+									</option>
+									<% } %>
+								</select>
+							</td>
+							<td>
+								<input type="texy" name="matricula" placeholder="Inserte matrícula" onchange="filterQuery(this.name, this.value, 'report1')">
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="table-container" id="report1">
+				</div>
+			</div>
+			<!--________________________TABLES 2_______________________________ -->
+			<div class="table-grid" id="tab2">
+				<div class="table-title">Prescripciones de Médicos</div>
+				<div class="queryFilter">
+					<table>
+						<tr>
+							<th>Filter by ATC</th>
+							<th>Filter by Lab</th>
+							<th>Filter by Doctor</th>
+						</tr>
+						<tr>
+							<td>
+								<select name="clase" onchange="filterQuery(this.name, this.value, 'report2')">
+									<% var ATCOptionsJSON = JSON.parse(ATCOptions); %>
+									<% for (var i = 0; i < ATCOptionsJSON.length; i++) { %>
+									<option value="<%= ATCOptionsJSON[i].clase %>">
+										<%= `${ATCOptionsJSON[i].clase} - ${ATCOptionsJSON[i].ATCName}` %>
+									</option>
+									<% } %>
+								</select>
+							</td>
+							<td>
+								<select name="desc_labo" onchange="filterQuery(this.name, this.value, 'report2')">
+									<% var LabOptionsJSON = JSON.parse(LabOptions); %>
+									<% for (var i = 0; i < LabOptionsJSON.length; i++) { %>
+									<option value="<%= LabOptionsJSON[i].lab %>">
+										<%= `${LabOptionsJSON[i].lab}` %>
+									</option>
+									<% } %>
+								</select>
+							</td>
+							<td>
+								<input type="texy" name="matricula" placeholder="Inserte matrícula" onchange="filterQuery(this.name, this.value, 'report2')">
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="table-container" id="report2">
+				</div>
+			</div>
+			<!--________________________TABLES 3_______________________________ -->
+			<div class="table-grid" id="tab3">
+				<div class="table-title">Recetas por Visitador</div>
+				<div class="table-container" id="report3">
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

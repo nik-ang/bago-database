@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Bagó Database</title>
+	<link rel="shortcut icon" type="image/x-icon" href="/img/titleicon.png">
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<link rel="stylesheet" type="text/css" href="css/ventas.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+	<%- include('repscripts.html'); %>
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+
+			$('.main-container').hide();
+			$('.table-grid').hide();
+			$('.loadingMessage').hide();
+
+			var dataClass = $.pivotUtilities.SubtotalPivotData;
+			var renderers = $.extend($.pivotUtilities.renderers, $.pivotUtilities.plotly_renderers, $.pivotUtilities.subtotal_renderers);
+			var aggregators = $.extend($.pivotUtilities.subtotal_aggregators, $.pivotUtilities.aggregators);
+
+			var sqlCloseup = ('<%- sqlCloseup %>');
+
+			$("#report1").pivotUI(
+				JSON.parse(sqlCloseup), {
+					dataClass: dataClass,
+					aggregators: aggregators,
+					rows: ['Lab'],
+					cols: ['Year', 'Month'],
+					aggregatorName: "Integer Sum",
+					vals: ['PXs'],
+					inclusions: {
+						'Lab': ["BAGO", "SAVAL", "ROEMMERS", "LASCA", "LAB.CHILE", "INDUFAR"]
+					},
+					rendererName: "Line Chart",
+					menuLimit: 10000,
+				}
+			);
+
+			$("#report2").pivotUI(
+				JSON.parse(sqlCloseup), {
+					dataClass: dataClass,
+					aggregators: aggregators,
+					rows: ['Product', 'Molecule', 'ATC'],
+					cols: ['Year', 'Month'],
+					aggregatorName: "Integer Sum",
+					rendererName: "Table With Subtotal",
+					vals: ['PXs'],
+					inclusions: {
+						'Lab': ['BAGO']
+					},
+					menuLimit: 10000,
+					rendererOptions: {
+						collapseColsAt: 0,
+						collapseRowsAt: 0,
+						rowSubtotalDisplay: {
+							disableSubtotal: true
+						},
+					},
+				}
+			);
+
+			$("#report3").pivotUI(
+				JSON.parse(sqlCloseup), {
+					dataClass: dataClass,
+					aggregators: aggregators,
+					rows: ['ATC', 'Product'],
+					cols: ['Year', 'Month'],
+					aggregatorName: "Sum as Fraction of Columns",
+					rendererName: "Table With Subtotal Col Heatmap",
+					vals: ['PXs'],
+					menuLimit: 10000,
+					rendererOptions: {
+						collapseColsAt: 0,
+						collapseRowsAt: 0,
+					},
+					rowOrder: "value_z_to_a",
+				}
+			);
+
+		});
+
+		function showReport(reportName) {
+			$('.main-container').fadeIn();
+			$('.table-grid').fadeOut();
+			$('#' + reportName).fadeIn();
+		}
+	</script>
+
+</head>
+
+
+<body>
+
+	<div class="loadingMessage">
+		<img src="img/bouncy.gif" alt="Loading">
+	</div>
+	<div class="main-grid">
+		<% admindashboard; %>
+		<%- include('header.ejs') %>
+		<!--________________________MENU_______________________________________________ -->
+		<div class="menu-grid">
+			<div class="menubar">
+				<div onclick="showReport('tab1')">Recetas por Laboratorios</div>
+				<div onclick="showReport('tab2')">Recetas de Bagó</div>
+				<div onclick="showReport('tab3')">Recetas por ATC</div>
+			</div>
+		</div>
+		<!--________________________CONTENT___________________________________________ -->
+		<div class="main-container">
+			<!--________________________TABLES 1_______________________________ -->
+			<div class="table-grid" id="tab1">
+				<div class="table-title">Recetas por Laboratorios</div>
+				<div class="table-container" id="report1">
+				</div>
+			</div>
+			<!--________________________TABLES 2_______________________________ -->
+			<div class="table-grid" id="tab2">
+				<div class="table-title">Recetas de Bagó</div>
+				<div class="table-container" id="report2">
+				</div>
+			</div>
+			<!--________________________TABLES 3_______________________________ -->
+			<div class="table-grid" id="tab3">
+				<div class="table-title">Recetas por ATC</div>
+				<div class="table-container" id="report3">
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

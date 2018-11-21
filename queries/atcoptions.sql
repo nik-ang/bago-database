@@ -1,0 +1,1 @@
+SELECT DISTINCT clase, ATCName FROM basecloseupfamilias JOIN atcnames ON ATCCod = clase ORDER BY clase ASC

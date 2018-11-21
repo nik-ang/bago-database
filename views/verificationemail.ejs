@@ -1,0 +1,66 @@
+<html>
+
+<head>
+
+	<style>
+		body {
+			margin-left: 15%;
+			width: 70%;
+			text-align: justify;
+			display: flex;
+			justify-content: center;
+			color: #222222;
+		}
+
+		.content-box {
+			padding-left: 2%;
+			padding-right: 2%;
+			box-shadow: 10px 10px 10px 1px #999999;;
+		}
+		.header {
+			color: white;
+			background-color: #222222;
+			padding: 1%;
+			margin-bottom: 2%;
+		}
+
+		button {
+			padding: 2%;
+			background-color: #333333;
+			border: none;
+			color: white;
+		}
+	</style>
+
+</head>
+
+<body>
+	<div class="content-box">
+		<div class="header">
+			<h1>Hola,
+				<%= name %>!</h1>
+			<h3>Por favor, verifique su dirección con el siguiente botón...</h3>
+		</div>
+
+		<a href="http://192.168.95.41:8080/verifyemail?name=<%= name %>&email=<%= email %>&hash=<%= hash %>&password=<%= password %>">
+			<button>Verify and Request Account</button>
+		</a>
+		<p>La solicitud deberá ser aprobada por los administradores de la página para que su cuenta tenga acceso a la misma.</p>
+		<p>Si no conoce el motivo de este E-mail, por favor, ignórelo así como él/ella le ignora.</p>
+		<p>De lo contrario, suponemos que debería tener algo mejor que hacer que llegar hasta este párrafo.</p>
+		<p>Bueno, ya que sigue leyendo, quisiera aprovechar para comentarle sobre nuestro amigo y salvador...</p>
+		<p>Ya en serio,
+			<%= name %>, no siga leyendo... mejor continúe con su vida.</p>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<p>Disculpe, <%= name %>, este mail ya está cerrado. Le agradecería si pudiera retirarse.</p>
+	</div>
+</body>
+
+</html>

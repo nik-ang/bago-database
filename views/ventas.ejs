@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Bagó Database</title>
+	<link rel="shortcut icon" type="image/x-icon" href="/img/titleicon.png">
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<link rel="stylesheet" type="text/css" href="css/ventas.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+	<%- include('repscripts.html'); %>
+
+
+	<script type="text/javascript">
+
+		$(document).ready(function () {
+
+			$('.main-container').hide();
+			$('.table-grid').hide();
+			$('.loadingMessage').hide();
+
+			var dataClass = $.pivotUtilities.SubtotalPivotData;
+			var renderers = $.extend($.pivotUtilities.renderers, $.pivotUtilities.plotly_renderers, $.pivotUtilities.subtotal_renderers);
+			var aggregators = $.extend($.pivotUtilities.subtotal_aggregators, $.pivotUtilities.aggregators);
+
+			var sqlSales = ('<%- sqlSales %>');
+			$("#report1").pivotUI(
+				JSON.parse(sqlSales), {
+					dataClass: dataClass,
+					aggregators: aggregators,
+					cols: ['Year', 'Month'],
+					rendererName: 'Line Chart',
+					aggregatorName: "Integer Sum",
+					vals: ['Guaranies'],
+				}
+			);
+
+			$("#report2").pivotUI(
+				JSON.parse(sqlSales), {
+					dataClass: dataClass,
+					aggregators: aggregators,
+					rows: ['Product'],
+					cols: ['Year', 'Month'],
+					aggregatorName: "Integer Sum",
+					rendererName: "Table With Subtotal",
+					vals: ['Guaranies'],
+					rendererOptions: {
+						collapseColsAt: 0,
+					},
+					rowOrder: "value_z_to_a",
+
+				}
+			);
+
+			$("#report3").pivotUI(
+				JSON.parse(sqlSales), {
+					dataClass: dataClass,
+					aggregators: aggregators,
+					rows: ['Client'],
+					cols: ['Year', 'Month'],
+					aggregatorName: "Integer Sum",
+					rendererName: "Table With Subtotal",
+					vals: ['Guaranies'],
+					rendererOptions: {
+						collapseColsAt: 0,
+					},
+					rowOrder: "value_z_to_a",
+				}
+			);
+
+		});
+
+		function showReport(reportName) {
+			$('.main-container').fadeIn();
+			$('.table-grid').fadeOut();
+			$('#'+reportName).fadeIn();
+		}
+
+	</script>
+
+</head>
+
+
+<body>
+	
+	<div class="loadingMessage">
+		<img src="img/bouncy.gif" alt="Loading">
+	</div>
+	<div class="main-grid">
+		<% admindashboard; %>
+		<%- include('header.ejs') %>
+		<!--________________________MENU_______________________________________________ -->
+		<div class="menu-grid">
+			<div class="menubar">
+				<div onclick="showReport('tab1')">Total Ventas</div>
+				<div onclick="showReport('tab2')">Ventas Por Productos</div>
+				<div onclick="showReport('tab3')">Ventas Por Clientes</div>
+			</div>
+		</div>
+		<!--________________________CONTENT___________________________________________ -->
+		<div class="main-container">
+			<div>
+				<!--________________________TABLES 1_______________________________ -->
+				<div class="table-grid" id="tab1">
+					<div class="table-title">Total Ventas</div>
+					<div class="table-container" id="report1">
+					</div>
+				</div>
+				<!--________________________TABLES 2_______________________________ -->
+				<div class="table-grid" id="tab2">
+					<div class="table-title">Ventas por Productos</div>
+					<div class="table-container" id="report2">
+					</div>
+				</div>
+				<!--________________________TABLES 3_______________________________ -->
+				<div class="table-grid" id="tab3">
+					<div class="table-title">Ventas por Clientes</div>
+					<div class="table-container" id="report3">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

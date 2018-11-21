@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Bagó Database</title>
+	<link rel="shortcut icon" type="image/x-icon" href="/img/titleicon.png">
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">-->
+	<link rel="stylesheet" type="text/css" href="/css/main.css">
+	<link rel="stylesheet" type="text/css" href="/css/index.css">
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+	<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+	<script>
+		$(document).mousemove(function () {
+			setTimeout(function () {
+				$('.indexBackground').fadeOut();
+				$('.particlescanvas').fadeIn();
+				$('.indexBackground').css('opacity', 0.5);
+			}, 500);
+		});
+	</script>
+
+</head>
+
+<body>
+	<div class="indexBackground"></div>
+	<% admindashboard; %>
+	<%- include('header.ejs') %>
+	<!--________________________MAIN_______________________________________________ -->
+	<div class="main-container">
+		<div class="main-content">
+			<div>
+				<div>BUSINESS INTELLIGENCE</div></b>
+				<img src="img/bago.png" class="mainlogo">
+			</div>
+
+		</div>
+		<img src="img/net.gif" alt="Cube" class="maingif">
+	</div>
+
+	<!--<canvas class="particlescanvas"></canvas>
+	<script src="js/particles.js"></script>
+	<script type="text/javascript" src="js/particlesapp.js"></script>-->
+</body>
+
+</html>

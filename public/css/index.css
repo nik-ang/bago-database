@@ -1,0 +1,57 @@
+body {
+    background: url();
+    background-color: black;
+}
+
+html, body {
+    height: 100%;
+}
+
+.indexBackground {
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.main-container {
+    min-height: 85%;
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    text-align: center;
+    color: transparent;
+}
+
+
+.maingif {
+    position: absolute;
+    max-height: 100%;
+    max-width: 100%;
+    filter: hue-rotate(-35deg);
+}
+
+.main-container div {
+    opacity: 1;
+    z-index: 1;
+    font-family: Helvetica, sans-serif;
+    /*font-size: 4vh;*/
+    color: white;
+}
+
+.main-container div img {
+    filter: brightness(0) invert(1);
+}
+
+.main-content {
+    width: 30vw;
+}
+
+.main-content img {
+    width: 100%;
+}

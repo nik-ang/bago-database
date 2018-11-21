@@ -1,0 +1,38 @@
+{
+  "name": "subtotal",
+  "description": "Subtotal.js is a JavaScript plugin for PivotTable.js. It renders subtotals of rows and columns with the ability to expand and collapse rows.",
+  "version": "1.11.0-alpha.0",
+  "main": [
+    "dist/subtotal.js"
+  ],
+  "license": "MIT",
+  "ignore": [
+    ".gitignore",
+    "gulpFile.js",
+    "package.json",
+    "bower.json",
+    "subtotal.coffee"
+  ],
+  "keywords": [
+    "pivot",
+    "crosstab",
+    "grid",
+    "table",
+    "pivottable",
+    "pivotgrid",
+    "pivotchart",
+    "jquery",
+    "subtotal",
+    "expand",
+    "collapse",
+    "summary"
+  ],
+  "homepage": "https://github.com/nagarajanchinnasamy/subtotal",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/nagarajanchinnasamy/subtotal.git"
+  },
+  "dependencies": {
+    "pivottable": ">=2.7.0"
+  }
+}
