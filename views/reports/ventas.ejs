@@ -14,7 +14,9 @@
 
 	<%- include('repscripts.html'); %>
 
+
 	<script type="text/javascript">
+
 		$(document).ready(function () {
 
 			$('.main-container').hide();
@@ -25,59 +27,44 @@
 			var renderers = $.extend($.pivotUtilities.renderers, $.pivotUtilities.plotly_renderers, $.pivotUtilities.subtotal_renderers);
 			var aggregators = $.extend($.pivotUtilities.subtotal_aggregators, $.pivotUtilities.aggregators);
 
-			var sqlIms = ('<%- sqlIms %>');
-
+			var sqlSales = ('<%- sqlSales %>');
 			$("#report1").pivotUI(
-				JSON.parse(sqlIms), {
+				JSON.parse(sqlSales), {
 					dataClass: dataClass,
 					aggregators: aggregators,
-					rows: ['Laboratories'],
 					cols: ['Year', 'Month'],
+					rendererName: 'Line Chart',
 					aggregatorName: "Integer Sum",
-					vals: ['USD'],
-					inclusions: {
-						'Laboratories': ['Bago', 'Lasca', 'Saval', 'Chile', 'Roemmers']
-					},
-					rendererName: "Line Chart",
-					menuLimit: 10000,
-					
+					vals: ['Guaranies'],
 				}
 			);
 
 			$("#report2").pivotUI(
-				JSON.parse(sqlIms), {
+				JSON.parse(sqlSales), {
 					dataClass: dataClass,
 					aggregators: aggregators,
-					rows: ['Product', 'ATC', 'Molecule'],
+					rows: ['Product'],
 					cols: ['Year', 'Month'],
 					aggregatorName: "Integer Sum",
 					rendererName: "Table With Subtotal",
-					vals: ['USD'],
-					inclusions: {
-						'Laboratories': ['Bago']
-					},
-					menuLimit: 10000,
+					vals: ['Guaranies'],
 					rendererOptions: {
 						collapseColsAt: 0,
-						collapseRowsAt: 0,
 					},
 					rowOrder: "value_z_to_a",
+
 				}
 			);
 
 			$("#report3").pivotUI(
-				JSON.parse(sqlIms), {
+				JSON.parse(sqlSales), {
 					dataClass: dataClass,
 					aggregators: aggregators,
-					rows: ['ATCName'],
+					rows: ['Client'],
 					cols: ['Year', 'Month'],
 					aggregatorName: "Integer Sum",
 					rendererName: "Table With Subtotal",
-					vals: ['USD'],
-					inclusions: {
-						'Laboratories': ['Bago']
-					},
-					menuLimit: 10000,
+					vals: ['Guaranies'],
 					rendererOptions: {
 						collapseColsAt: 0,
 					},
@@ -90,47 +77,50 @@
 		function showReport(reportName) {
 			$('.main-container').fadeIn();
 			$('.table-grid').fadeOut();
-			$('#' + reportName).fadeIn();
+			$('#'+reportName).fadeIn();
 		}
+
 	</script>
 
 </head>
 
 
 <body>
-
+	
 	<div class="loadingMessage">
 		<img src="img/bouncy.gif" alt="Loading">
 	</div>
 	<div class="main-grid">
 		<% admindashboard; %>
-		<%- include('header.ejs') %>
+		<%- include('../header.ejs') %>
 		<!--________________________MENU_______________________________________________ -->
 		<div class="menu-grid">
 			<div class="menubar">
-				<div onclick="showReport('tab1')">USD por Laboratorio</div>
-				<div onclick="showReport('tab2')">USD Por Productos</div>
-				<div onclick="showReport('tab3')">USD Por ATC</div>
+				<div onclick="showReport('tab1')">Total Ventas</div>
+				<div onclick="showReport('tab2')">Ventas Por Productos</div>
+				<div onclick="showReport('tab3')">Ventas Por Clientes</div>
 			</div>
 		</div>
 		<!--________________________CONTENT___________________________________________ -->
 		<div class="main-container">
-			<!--________________________TABLES 1_______________________________ -->
-			<div class="table-grid" id="tab1">
-				<div class="table-title">USD por Laboratorio</div>
-				<div class="table-container" id="report1">
+			<div>
+				<!--________________________TABLES 1_______________________________ -->
+				<div class="table-grid" id="tab1">
+					<div class="table-title">Total Ventas</div>
+					<div class="table-container" id="report1">
+					</div>
 				</div>
-			</div>
-			<!--________________________TABLES 2_______________________________ -->
-			<div class="table-grid" id="tab2">
-				<div class="table-title">USD Por Productos</div>
-				<div class="table-container" id="report2">
+				<!--________________________TABLES 2_______________________________ -->
+				<div class="table-grid" id="tab2">
+					<div class="table-title">Ventas por Productos</div>
+					<div class="table-container" id="report2">
+					</div>
 				</div>
-			</div>
-			<!--________________________TABLES 3_______________________________ -->
-			<div class="table-grid" id="tab3">
-				<div class="table-title">USD Por ATC</div>
-				<div class="table-container" id="report3">
+				<!--________________________TABLES 3_______________________________ -->
+				<div class="table-grid" id="tab3">
+					<div class="table-title">Ventas por Clientes</div>
+					<div class="table-container" id="report3">
+					</div>
 				</div>
 			</div>
 		</div>

@@ -47,8 +47,8 @@ const mailer = nodemailer.createTransport({
  * PORT
  */
 
-app.listen(8080, function () {
-    console.log("Listening on port " + 8080);
+app.listen(80, function () {
+    console.log("Listening on port " + 80);
 });
 
 /**
@@ -78,7 +78,7 @@ app.use(function (req, res, next) {
 
 function sendVerificationEmail(name, email, hash, password) {
 
-    var ejsFile = ejs.compile(fs.readFileSync('views/verificationemail.ejs').toString());
+    var ejsFile = ejs.compile(fs.readFileSync('views/users/verificationemail.ejs').toString());
     var html = ejsFile({
         name: name,
         email: email,
@@ -129,7 +129,7 @@ app.get('/login', function (req, res) {
     if (req.session.signedIn) {
         res.redirect('/');
     } else {
-        res.render('login', {
+        res.render('users/login', {
             message: "",
             email: ""
         });
@@ -149,7 +149,7 @@ app.post('/login', function (req, res) {
 
         //If no result with the given e-mail is found, then INCORRECT USER. Else proceed...
         if (result == "") {
-            return res.render('login', {
+            return res.render('users/login', {
                 message: "Usuario incorrecto",
                 email: ""
             });
@@ -159,7 +159,7 @@ app.post('/login', function (req, res) {
 
             //check if the E-mail is already verified. If not, E-MAIL IS NOT VERIFIED...
             if (result[0].verified == 0) {
-                res.render('login', {
+                res.render('users/login', {
                     message: `Su E-mail no está verificado. <a href="/signin/resendemail?email=${email}">Click aquí para reenviar mail de verificación</a>`,
                     email: ""
                 });
@@ -176,7 +176,7 @@ app.post('/login', function (req, res) {
 
                 //If not, USER NOT APPROVED
             } else {
-                res.render('login', {
+                res.render('users/login', {
                     message: "Su usuario aún no ha sido aprobado",
                     email: ""
                 });
@@ -184,7 +184,7 @@ app.post('/login', function (req, res) {
 
             //If password is incorrect, reload the page with pre-loaded E-mail
         } else {
-            res.render('login', {
+            res.render('users/login', {
                 message: "Contraseña Incorrecta",
                 email: email
             });
@@ -206,7 +206,7 @@ app.get('/signin', function (req, res) {
     if (req.session.signedIn) {
         res.redirect('/');
     } else {
-        res.render('signin', {
+        res.render('users/signin', {
             message: ""
         });
     }
@@ -221,7 +221,7 @@ app.post('/signin', function (req, res) {
 
         //If result is not empty, thus, it does exists, reload page with message...
         if (result != "") {
-            return res.render('signin', {
+            return res.render('users/signin', {
                 message: "An account with this E-mail already exists"
             });
 
@@ -238,7 +238,7 @@ app.post('/signin', function (req, res) {
                  */
 
                 if (result != "") {
-                    res.render('signin', {
+                    res.render('users/signin', {
                         message: "Sorry, this account has been rejected or deleted"
                     });
   
@@ -272,7 +272,7 @@ app.post('/signin', function (req, res) {
                             });
 
                             //Render notify.ejs with a message...
-                            res.render('notify', {
+                            res.render('users/notify', {
                                 message1: `HI ${name.toUpperCase()}, YOUR REQUEST IS ALMOST READY`,
                                 message2: `Please verify your E-mail Adress. 
                                 <a href="/signin/resendemail?email=${email}">Click here to send verification E-mail again</a>`
@@ -281,7 +281,7 @@ app.post('/signin', function (req, res) {
 
                     //If passwords don't match...
                     } else {
-                        res.render('signin', {
+                        res.render('users/signin', {
                             message: "Passwords don't match"
                         });
                     }
@@ -297,7 +297,7 @@ app.get('/signin/resendemail', function (req, res) {
     if (req.query.email) {
         email = req.query.email;
     }
-    res.render('resendemail', {
+    res.render('users/resendemail', {
         email: email,
         message: ""
     });
@@ -312,7 +312,7 @@ app.post('/signin/resendemail', function (req, res) {
     bagodb.query(sql, function (error, result) {
         if (error) throw error;
         if (result == "") {
-            res.render('resendemail', {
+            res.render('users/resendemail', {
                 email: "",
                 message: "E-mail not found"
             });
@@ -331,7 +331,7 @@ app.get('/login/passwordrecovery', function (req, res) {
     if (req.session.signedIn) {
         res.redirect('/');
     } else {
-        res.render('passwordrecovery', {
+        res.render('users/passwordrec/passwordrecovery', {
             email: "",
             message: ""
         });
@@ -351,7 +351,7 @@ app.post('/login/passwordrecovery', function (req, res) {
             var name = result[0].name;
             var hash = result[0].hash;
             sendResetPassword(name, email, hash);
-            res.render('notify', {
+            res.render('users/notify', {
                 message1: "RECOVERY E-MAIL SENT",
                 message2: "Change your password"
             });
@@ -371,7 +371,7 @@ app.get('/login/setnewpassword', function (req, res) {
     bagodb.query(sql, function (error, result) {
         if (error) throw error;
         if (result == "") {
-            res.render('notify', {
+            res.render('users/notify', {
                 message1: "ERROR 404",
                 message2: "ERROR 404"
             });
@@ -383,7 +383,7 @@ app.get('/login/setnewpassword', function (req, res) {
                     message: "",
                 });
             } else {
-                res.render('notify', {
+                res.render('users/notify', {
                     message1: "ERROR 404",
                     message2: "ERROR 404"
                 });
@@ -414,7 +414,7 @@ app.get('/verifyemail', function (req, res) {
         if (error) throw error;
         //If result is empty: ERROR
         if (result == "") {
-            res.render('notify', {
+            res.render('users/notify', {
                 message1: "ERROR 404",
                 message2: "ERROR 404",
             });
@@ -428,7 +428,7 @@ app.get('/verifyemail', function (req, res) {
                 //QUERY and proceed to notify
                 bagodb.query(verifySql, function (error, result) {
                     if (error) throw error;
-                    res.render('notify', {
+                    res.render('users/notify', {
                         message1: "YOUR E-MAIL IS NOW VERIFIED",
                         message2: '<a href="/login">Proceed to Log In Page</a>'
                     })
@@ -444,7 +444,7 @@ app.get('/verifyemail', function (req, res) {
 
             // If data does not match: ERROR
             } else {
-                res.render('notify', {
+                res.render('users/notify', {
                     message1: "ERROR 404",
                     message2: "ERROR 404"
                 });
@@ -478,7 +478,7 @@ app.get('/ventas', function (req, res) {
             if (error) throw error;
             sqlSales = JSON.stringify(sqlSalesQ);
             res.render(
-                'ventas.ejs', {
+                'reports/ventas.ejs', {
                     sqlSales: sqlSales,
                     admindashboard: req.session.isadmin
                 }
@@ -498,7 +498,7 @@ app.get('/closeup', function (req, res) {
             if (error) throw error;
             sqlCloseup = JSON.stringify(sqlCloseupQ);
             res.render(
-                'closeup.ejs', {
+                'reports/closeup.ejs', {
                     sqlCloseup: sqlCloseup,
                     admindashboard: req.session.isadmin
                 }
@@ -532,7 +532,7 @@ app.get('/closeup-medicos', function (req, res) {
                     ATCOptions = JSON.stringify(ATCOptionsQ);
                     LabOptions = JSON.stringify(LabOptionsQ);
                     res.render(
-                        'closeup-medicos.ejs', {
+                        'reports/closeup-medicos.ejs', {
                             sqlCloseupMedicos: sqlCloseupMedicos,
                             ATCOptions: ATCOptions,
                             LabOptions: LabOptions,
@@ -576,7 +576,7 @@ app.get('/ims', function (req, res) {
         bagodb.query(sqlIms, function (error, sqlImsQ) {
             if (error) throw error;
             sqlIms = JSON.stringify(sqlImsQ);
-            res.render('ims.ejs', {
+            res.render('reports/ims.ejs', {
                 sqlIms: sqlIms,
                 admindashboard: req.session.isadmin
             });

@@ -25,60 +25,61 @@
 			var renderers = $.extend($.pivotUtilities.renderers, $.pivotUtilities.plotly_renderers, $.pivotUtilities.subtotal_renderers);
 			var aggregators = $.extend($.pivotUtilities.subtotal_aggregators, $.pivotUtilities.aggregators);
 
-			var sqlCloseup = ('<%- sqlCloseup %>');
+			var sqlIms = ('<%- sqlIms %>');
 
 			$("#report1").pivotUI(
-				JSON.parse(sqlCloseup), {
+				JSON.parse(sqlIms), {
 					dataClass: dataClass,
 					aggregators: aggregators,
-					rows: ['Lab'],
+					rows: ['Laboratories'],
 					cols: ['Year', 'Month'],
 					aggregatorName: "Integer Sum",
-					vals: ['PXs'],
+					vals: ['USD'],
 					inclusions: {
-						'Lab': ["BAGO", "SAVAL", "ROEMMERS", "LASCA", "LAB.CHILE", "INDUFAR"]
+						'Laboratories': ['Bago', 'Lasca', 'Saval', 'Chile', 'Roemmers']
 					},
 					rendererName: "Line Chart",
 					menuLimit: 10000,
+					
 				}
 			);
 
 			$("#report2").pivotUI(
-				JSON.parse(sqlCloseup), {
+				JSON.parse(sqlIms), {
 					dataClass: dataClass,
 					aggregators: aggregators,
-					rows: ['Product', 'Molecule', 'ATC'],
+					rows: ['Product', 'ATC', 'Molecule'],
 					cols: ['Year', 'Month'],
 					aggregatorName: "Integer Sum",
 					rendererName: "Table With Subtotal",
-					vals: ['PXs'],
+					vals: ['USD'],
 					inclusions: {
-						'Lab': ['BAGO']
+						'Laboratories': ['Bago']
 					},
 					menuLimit: 10000,
 					rendererOptions: {
 						collapseColsAt: 0,
 						collapseRowsAt: 0,
-						rowSubtotalDisplay: {
-							disableSubtotal: true
-						},
 					},
+					rowOrder: "value_z_to_a",
 				}
 			);
 
 			$("#report3").pivotUI(
-				JSON.parse(sqlCloseup), {
+				JSON.parse(sqlIms), {
 					dataClass: dataClass,
 					aggregators: aggregators,
-					rows: ['ATC', 'Product'],
+					rows: ['ATCName'],
 					cols: ['Year', 'Month'],
-					aggregatorName: "Sum as Fraction of Columns",
-					rendererName: "Table With Subtotal Col Heatmap",
-					vals: ['PXs'],
+					aggregatorName: "Integer Sum",
+					rendererName: "Table With Subtotal",
+					vals: ['USD'],
+					inclusions: {
+						'Laboratories': ['Bago']
+					},
 					menuLimit: 10000,
 					rendererOptions: {
 						collapseColsAt: 0,
-						collapseRowsAt: 0,
 					},
 					rowOrder: "value_z_to_a",
 				}
@@ -103,32 +104,32 @@
 	</div>
 	<div class="main-grid">
 		<% admindashboard; %>
-		<%- include('header.ejs') %>
+		<%- include('../header.ejs') %>
 		<!--________________________MENU_______________________________________________ -->
 		<div class="menu-grid">
 			<div class="menubar">
-				<div onclick="showReport('tab1')">Recetas por Laboratorios</div>
-				<div onclick="showReport('tab2')">Recetas de Bagó</div>
-				<div onclick="showReport('tab3')">Recetas por ATC</div>
+				<div onclick="showReport('tab1')">USD por Laboratorio</div>
+				<div onclick="showReport('tab2')">USD Por Productos</div>
+				<div onclick="showReport('tab3')">USD Por ATC</div>
 			</div>
 		</div>
 		<!--________________________CONTENT___________________________________________ -->
 		<div class="main-container">
 			<!--________________________TABLES 1_______________________________ -->
 			<div class="table-grid" id="tab1">
-				<div class="table-title">Recetas por Laboratorios</div>
+				<div class="table-title">USD por Laboratorio</div>
 				<div class="table-container" id="report1">
 				</div>
 			</div>
 			<!--________________________TABLES 2_______________________________ -->
 			<div class="table-grid" id="tab2">
-				<div class="table-title">Recetas de Bagó</div>
+				<div class="table-title">USD Por Productos</div>
 				<div class="table-container" id="report2">
 				</div>
 			</div>
 			<!--________________________TABLES 3_______________________________ -->
 			<div class="table-grid" id="tab3">
-				<div class="table-title">Recetas por ATC</div>
+				<div class="table-title">USD Por ATC</div>
 				<div class="table-container" id="report3">
 				</div>
 			</div>
