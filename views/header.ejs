@@ -1,42 +1,35 @@
-<div class="headerContainer">
-	<div class="logobago-container">
-		<a href="/"><img src="img/bago.png" class="logobago"></a>
-	</div>
-	<div class="titles">
-		<div class="primaryTitle">BAGO B.I.</div>
-		<div class="secondaryTitle">Business Intelligence</div>
-	</div>
-	<a href="logout" class="logout"><div class="logout">Log Out</div></a>
-</div>
 <!--________________________NAVBAR_______________________________________________ -->
-<div class="navbar-grid">
-	<div class="navbar">
-		<a href="ventas">
-			<div class="navbarbutton" id="VentasButton">
-				<i class="fa fa-money"></i>&nbsp;Ventas
-			</div>
-		</a>
-		<a href="ims">
-			<div class="navbarbutton" id="IMSButton">
-				<i class="fa fa-bar-chart"></i>&nbsp;IMS
-			</div>
-		</a>
-		<a href="closeup">
-			<div class="navbarbutton" id="CloseUpButton">
-				<i class="fa fa-pie-chart"></i>&nbsp;Close Up
-			</div>
-		</a>
-		<a href="closeup-medicos">
-			<div class="navbarbutton" id="CoberturasUpButton">
-				<i class="fa fa-black-tie"></i>&nbsp;Close Up - Medicos
-			</div>
-		</a>
-		<% if (admindashboard) { %>
-			<a href="/admindashboard">
-			<div class="navbarbutton" id="AdmindashboardButton">
-				<i class="fa fa-superpowers" aria-hidden="true"></i>&nbsp;Admin Dashboard
-			</div>
-		</a>
-		<% } %>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+	<a class="navbar-brand" href="/"><img src="img/bago.png" class="logobago"></a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+	 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+
+	<div class="collapse navbar-collapse" id="navbarSupportedContent">
+		<ul class="navbar-nav mr-auto">
+			<li class="nav-item"><a class="nav-link" href="/">Inicio</a></li>
+			<li class="nav-item dropdown">
+				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+				 aria-expanded="false">
+					Menu
+				</a>
+				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+					<a class="dropdown-item" href="ventas"><i class="fa fa-money"></i>&nbsp;Ventas</a>
+					<a class="dropdown-item" href="ims"><i class="fa fa-bar-chart"></i>&nbsp;IMS</a>
+					<a class="dropdown-item" href="closeup"><i class="fa fa-pie-chart"></i>&nbsp;Close Up</a>
+					<a class="dropdown-item" href="closeup-medicos"><i class="fa fa-black-tie"></i>&nbsp;Close Up - Medicos</a>
+					<% if (admindashboard) { %>
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" href="admindashboard"><i class="fa fa-superpowers" aria-hidden="true"></i>&nbsp;Admin
+						Dashboard</a>
+					<% } %>
+				</div>
+			</li>
+		</ul>
+		<h1 class="display-4" style="font-size: 2em">Business Intelligence&nbsp;</h1>
+		<a href="logout" class="nav-item" style="color: inherit;"><button class="btn btn-outline-danger my-2 my-sm-0" type="submit">Log
+				Out</button></a>
 	</div>
-</div>
+</nav>

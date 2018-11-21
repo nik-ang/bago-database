@@ -7,8 +7,11 @@
 
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<%- include('../bootstrap.html') %>
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 	<link rel="stylesheet" type="text/css" href="css/ventas.css">
+
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
@@ -16,11 +19,9 @@
 
 
 	<script type="text/javascript">
-
 		$(document).ready(function () {
 
 			$('.main-container').hide();
-			$('.table-grid').hide();
 			$('.loadingMessage').hide();
 
 			var dataClass = $.pivotUtilities.SubtotalPivotData;
@@ -77,50 +78,54 @@
 		function showReport(reportName) {
 			$('.main-container').fadeIn();
 			$('.table-grid').fadeOut();
-			$('#'+reportName).fadeIn();
+			$('#' + reportName).fadeIn();
 		}
-
 	</script>
 
 </head>
 
 
 <body>
-	
+
 	<div class="loadingMessage">
 		<img src="img/bouncy.gif" alt="Loading">
 	</div>
-	<div class="main-grid">
-		<% admindashboard; %>
-		<%- include('../header.ejs') %>
-		<!--________________________MENU_______________________________________________ -->
-		<div class="menu-grid">
-			<div class="menubar">
-				<div onclick="showReport('tab1')">Total Ventas</div>
-				<div onclick="showReport('tab2')">Ventas Por Productos</div>
-				<div onclick="showReport('tab3')">Ventas Por Clientes</div>
-			</div>
+	<% admindashboard; %>
+	<%- include('../header.ejs') %>
+
+	<!--________________________MENU_______________________________________________ -->
+
+	<nav class="navbar navbar-expand-lg navbar-dark menu">
+		<button class="navbar-toggler btn-block" type="button" data-toggle="collapse" data-target="#menuSupportedContent" aria-controls="navbarSupportedContent"
+		 aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse flex-column flex-sm-row" id="menuSupportedContent">
+			<nav class="nav nav-pills flex-column flex-sm-row">
+				<a class="flex-sm-fill text-sm-center nav-link" data-toggle="pill" href="#tab1">Total Ventas</a>
+				<a class="flex-sm-fill text-sm-center nav-link" data-toggle="pill" href="#tab2">Ventas por Productos</a>
+				<a class="flex-sm-fill text-sm-center nav-link" data-toggle="pill" href="#tab3">Ventas por Clientes</a>
+			</nav>
 		</div>
+	</nav>
+
+	<div class="container-fluid">
 		<!--________________________CONTENT___________________________________________ -->
-		<div class="main-container">
-			<div>
-				<!--________________________TABLES 1_______________________________ -->
-				<div class="table-grid" id="tab1">
-					<div class="table-title">Total Ventas</div>
-					<div class="table-container" id="report1">
-					</div>
+		<div class="tab-content">
+			<div class="table-grid tab-pane fade" id="tab1">
+				<div class="table-title">Total Ventas</div>
+				<div class="table-container" id="report1">
 				</div>
-				<!--________________________TABLES 2_______________________________ -->
-				<div class="table-grid" id="tab2">
-					<div class="table-title">Ventas por Productos</div>
-					<div class="table-container" id="report2">
-					</div>
+			</div>
+			<div class="table-grid tab-pane fade" id="tab2">
+				<div class="table-title">Ventas por Productos</div>
+				<div class="table-container" id="report2">
 				</div>
-				<!--________________________TABLES 3_______________________________ -->
-				<div class="table-grid" id="tab3">
-					<div class="table-title">Ventas por Clientes</div>
-					<div class="table-container" id="report3">
-					</div>
+			</div>
+			<div class="table-grid tab-pane fade" id="tab3">
+				<div class="table-title">Ventas por Clientes</div>
+				<div class="table-container" id="report3">
 				</div>
 			</div>
 		</div>

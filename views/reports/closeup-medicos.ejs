@@ -7,6 +7,8 @@
 
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<%- include('../bootstrap.html') %>
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 	<link rel="stylesheet" type="text/css" href="css/ventas.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -100,104 +102,102 @@
 	<div class="loadingMessage">
 		<img src="img/bouncy.gif" alt="Loading">
 	</div>
-	<div class="main-grid">
-		<% admindashboard; %>
-		<%- include('../header.ejs') %>
-		<!--________________________MENU_______________________________________________ -->
-		<div class="menu-grid">
-			<div class="menubar">
-				<div onclick="showReport('tab1')">Prescriptores de Bagó</div>
-				<div onclick="showReport('tab2')">Prescripciones de Médicos</div>
-				<div onclick="showReport('tab3')">Recetas por Visitador</div>
+	<%- include('../header.ejs') %>
+	<% admindashboard; %>
+	<!--________________________MENU_______________________________________________ -->
+	<div class="menu-grid">
+		<div class="menubar">
+			<div onclick="showReport('tab1')">Prescriptores de Bagó</div>
+			<div onclick="showReport('tab2')">Prescripciones de Médicos</div>
+			<div onclick="showReport('tab3')">Recetas por Visitador</div>
+		</div>
+	</div>
+	<!--________________________CONTENT___________________________________________ -->
+	<div class="main-container">
+		<!--________________________TABLES 1_______________________________ -->
+		<div class="table-grid" id="tab1">
+			<div class="table-title">Prescriptores de Bagó</div>
+			<div class="queryFilter">
+				<table>
+					<tr>
+						<th>Filter by ATC</th>
+						<th>Filter by Lab</th>
+						<th>Filter by Doctor</th>
+					</tr>
+					<tr>
+						<td>
+							<select name="clase" onchange="filterQuery(this.name, this.value, 'report1')">
+								<% var ATCOptionsJSON = JSON.parse(ATCOptions); %>
+								<% for (var i = 0; i < ATCOptionsJSON.length; i++) { %>
+								<option value="<%= ATCOptionsJSON[i].clase %>">
+									<%= `${ATCOptionsJSON[i].clase} - ${ATCOptionsJSON[i].ATCName}` %>
+								</option>
+								<% } %>
+							</select>
+						</td>
+						<td>
+							<select name="desc_labo" onchange="filterQuery(this.name, this.value, 'report1')">
+								<% var LabOptionsJSON = JSON.parse(LabOptions); %>
+								<% for (var i = 0; i < LabOptionsJSON.length; i++) { %>
+								<option value="<%= LabOptionsJSON[i].lab %>">
+									<%= `${LabOptionsJSON[i].lab}` %>
+								</option>
+								<% } %>
+							</select>
+						</td>
+						<td>
+							<input type="texy" name="matricula" placeholder="Inserte matrícula" onchange="filterQuery(this.name, this.value, 'report1')">
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="table-container" id="report1">
 			</div>
 		</div>
-		<!--________________________CONTENT___________________________________________ -->
-		<div class="main-container">
-			<!--________________________TABLES 1_______________________________ -->
-			<div class="table-grid" id="tab1">
-				<div class="table-title">Prescriptores de Bagó</div>
-				<div class="queryFilter">
-					<table>
-						<tr>
-							<th>Filter by ATC</th>
-							<th>Filter by Lab</th>
-							<th>Filter by Doctor</th>
-						</tr>
-						<tr>
-							<td>
-								<select name="clase" onchange="filterQuery(this.name, this.value, 'report1')">
-									<% var ATCOptionsJSON = JSON.parse(ATCOptions); %>
-									<% for (var i = 0; i < ATCOptionsJSON.length; i++) { %>
-									<option value="<%= ATCOptionsJSON[i].clase %>">
-										<%= `${ATCOptionsJSON[i].clase} - ${ATCOptionsJSON[i].ATCName}` %>
-									</option>
-									<% } %>
-								</select>
-							</td>
-							<td>
-								<select name="desc_labo" onchange="filterQuery(this.name, this.value, 'report1')">
-									<% var LabOptionsJSON = JSON.parse(LabOptions); %>
-									<% for (var i = 0; i < LabOptionsJSON.length; i++) { %>
-									<option value="<%= LabOptionsJSON[i].lab %>">
-										<%= `${LabOptionsJSON[i].lab}` %>
-									</option>
-									<% } %>
-								</select>
-							</td>
-							<td>
-								<input type="texy" name="matricula" placeholder="Inserte matrícula" onchange="filterQuery(this.name, this.value, 'report1')">
-							</td>
-						</tr>
-					</table>
-				</div>
-				<div class="table-container" id="report1">
-				</div>
+		<!--________________________TABLES 2_______________________________ -->
+		<div class="table-grid" id="tab2">
+			<div class="table-title">Prescripciones de Médicos</div>
+			<div class="queryFilter">
+				<table>
+					<tr>
+						<th>Filter by ATC</th>
+						<th>Filter by Lab</th>
+						<th>Filter by Doctor</th>
+					</tr>
+					<tr>
+						<td>
+							<select name="clase" onchange="filterQuery(this.name, this.value, 'report2')">
+								<% var ATCOptionsJSON = JSON.parse(ATCOptions); %>
+								<% for (var i = 0; i < ATCOptionsJSON.length; i++) { %>
+								<option value="<%= ATCOptionsJSON[i].clase %>">
+									<%= `${ATCOptionsJSON[i].clase} - ${ATCOptionsJSON[i].ATCName}` %>
+								</option>
+								<% } %>
+							</select>
+						</td>
+						<td>
+							<select name="desc_labo" onchange="filterQuery(this.name, this.value, 'report2')">
+								<% var LabOptionsJSON = JSON.parse(LabOptions); %>
+								<% for (var i = 0; i < LabOptionsJSON.length; i++) { %>
+								<option value="<%= LabOptionsJSON[i].lab %>">
+									<%= `${LabOptionsJSON[i].lab}` %>
+								</option>
+								<% } %>
+							</select>
+						</td>
+						<td>
+							<input type="texy" name="matricula" placeholder="Inserte matrícula" onchange="filterQuery(this.name, this.value, 'report2')">
+						</td>
+					</tr>
+				</table>
 			</div>
-			<!--________________________TABLES 2_______________________________ -->
-			<div class="table-grid" id="tab2">
-				<div class="table-title">Prescripciones de Médicos</div>
-				<div class="queryFilter">
-					<table>
-						<tr>
-							<th>Filter by ATC</th>
-							<th>Filter by Lab</th>
-							<th>Filter by Doctor</th>
-						</tr>
-						<tr>
-							<td>
-								<select name="clase" onchange="filterQuery(this.name, this.value, 'report2')">
-									<% var ATCOptionsJSON = JSON.parse(ATCOptions); %>
-									<% for (var i = 0; i < ATCOptionsJSON.length; i++) { %>
-									<option value="<%= ATCOptionsJSON[i].clase %>">
-										<%= `${ATCOptionsJSON[i].clase} - ${ATCOptionsJSON[i].ATCName}` %>
-									</option>
-									<% } %>
-								</select>
-							</td>
-							<td>
-								<select name="desc_labo" onchange="filterQuery(this.name, this.value, 'report2')">
-									<% var LabOptionsJSON = JSON.parse(LabOptions); %>
-									<% for (var i = 0; i < LabOptionsJSON.length; i++) { %>
-									<option value="<%= LabOptionsJSON[i].lab %>">
-										<%= `${LabOptionsJSON[i].lab}` %>
-									</option>
-									<% } %>
-								</select>
-							</td>
-							<td>
-								<input type="texy" name="matricula" placeholder="Inserte matrícula" onchange="filterQuery(this.name, this.value, 'report2')">
-							</td>
-						</tr>
-					</table>
-				</div>
-				<div class="table-container" id="report2">
-				</div>
+			<div class="table-container" id="report2">
 			</div>
-			<!--________________________TABLES 3_______________________________ -->
-			<div class="table-grid" id="tab3">
-				<div class="table-title">Recetas por Visitador</div>
-				<div class="table-container" id="report3">
-				</div>
+		</div>
+		<!--________________________TABLES 3_______________________________ -->
+		<div class="table-grid" id="tab3">
+			<div class="table-title">Recetas por Visitador</div>
+			<div class="table-container" id="report3">
 			</div>
 		</div>
 	</div>

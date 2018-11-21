@@ -1,25 +1,17 @@
 body {
     background: url();
     background-color: black;
+    overflow: hidden;
 }
 
 html, body {
     height: 100%;
-}
-
-.indexBackground {
-    height: 100%;
-    width: 100%;
-    position: fixed;
     background-color: black;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 .main-container {
-    min-height: 85%;
-    background-color: transparent;
+    background-color: black;
+    min-height: 95%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -39,9 +31,7 @@ html, body {
 .main-container div {
     opacity: 1;
     z-index: 1;
-    font-family: Helvetica, sans-serif;
     /*font-size: 4vh;*/
-    color: white;
 }
 
 .main-container div img {

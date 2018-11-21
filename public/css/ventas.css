@@ -75,38 +75,8 @@ select {
 	grid-auto-rows: auto;
 }
 
-.menu-grid {
-	height: 2.05em;
-	padding-left: 10%;
-	padding-right: 10%;
-	grid-column: 1 / span 25;
-	grid-row: 4;
-	background-color: rgba(41, 41, 41, 0.5);
-}
-
-.menubar {
-	height: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-.menubar div {
-	color: gray;
-	height: 100%;
-	width: 100%;
-	padding-left: 5vw;
-	padding-right: 5vw;
-	display: flex;
-	text-align: center;
-	justify-content: center;
-	align-items: center;
-}
-
-.menubar div:hover {
-	color: white;
-	background-color: rgba(38, 38, 38, 0.5);
-	cursor: pointer;
+.menu {
+	background-color: #25292c;
 }
 
 .queryFilter {
@@ -116,18 +86,9 @@ select {
 	padding-top: 2vh;
 }
 
-.table-grid {
-	background-color: rgba(8, 8, 8, 0.582);
-	display: grid;
-	grid-auto-rows: auto;
-}
-
 .table-title {
-	font-size: 12px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	background-color: #333333;
+	text-align: center;
+	background-color: #262629;
 	color: white;
 	padding-top: 2vh;
 	padding-bottom: 2vh;
@@ -182,8 +143,7 @@ select {
 }
 
 .table-container {
-	min-height: 20vh;
-	max-height: 70vh;
+	height: 70vh;
 	padding-top: 2vh;
 	padding-bottom: 2vh;
 	display: flex;
