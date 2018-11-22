@@ -2,47 +2,64 @@ a {
     color: white;
 }
 
-.formTitle {
+.main {
     width: 100%;
-    height: 6em;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.formTitle {
+    padding: 1em;
+    width: 100%;
+    font-size: 2em;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(193, 34, 214, 0.5);
+    background-color: #25292c;
+    color: #424a50;
 }
 
 .formContainer {
-    background-color: rgba(161, 161, 161, 0.5);
-}
-
-.formContainer form {
-    margin-top: 1%;
-    padding-top: 2%;
-}
-
-.formContainer label {
-    font-size: 1.1em;
-}
-
-.formContainer input {
-    margin-top: 2%;
-    margin-bottom: 2%;
-    width: 50%;
-    padding: 2%;
-}
-
-.formContainer input[type=submit], .formContainer button {
-    border: none;
-    padding-top: 2%;
-    padding-bottom: 2%; 
+    padding-top: 1%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #35383a;
     color: white;
+}
+
+.form-rectangle {
+    width: 90%;
+}
+
+.form-group {
+    margin: 0;
+}
+
+.formContainer input[type=submit],
+.formContainer button {
     margin-top: 2%;
     margin-bottom: 2%;
     background-color: green;
 }
 
-.message {
-    font-size: 1.1em;
-    width: 100%;
-    background-color: rgba(199, 0, 0, 0.541);
+.alert a {
+    color: inherit;
+}
+
+.alert a:hover {
+    color: inherit;
+    text-decoration: underline;
+}
+
+.alert-danger {
+    color: #e98890;
+    background-color: #832d34;
+}
+
+.alert-success {
+    color: #5abd71;
+    background-color: #155724;
 }

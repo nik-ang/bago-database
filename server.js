@@ -131,7 +131,8 @@ app.get('/login', function (req, res) {
     } else {
         res.render('users/login', {
             message: "",
-            email: ""
+            email: "",
+            messageClass: "",
         });
     }
 });
@@ -151,7 +152,8 @@ app.post('/login', function (req, res) {
         if (result == "") {
             return res.render('users/login', {
                 message: "Usuario incorrecto",
-                email: ""
+                email: "",
+                messageClass: "alert-danger"
             });
 
             //check if given password matches the result. If not, INCORRECT PASSWORD...
@@ -161,7 +163,8 @@ app.post('/login', function (req, res) {
             if (result[0].verified == 0) {
                 res.render('users/login', {
                     message: `Su E-mail no está verificado. <a href="/signin/resendemail?email=${email}">Click aquí para reenviar mail de verificación</a>`,
-                    email: ""
+                    email: "",
+                    messageClass: "alert-danger"
                 });
 
                 /**
@@ -178,7 +181,8 @@ app.post('/login', function (req, res) {
             } else {
                 res.render('users/login', {
                     message: "Su usuario aún no ha sido aprobado",
-                    email: ""
+                    email: "",
+                    messageClass: "alert-warning"
                 });
             }
 
@@ -186,7 +190,8 @@ app.post('/login', function (req, res) {
         } else {
             res.render('users/login', {
                 message: "Contraseña Incorrecta",
-                email: email
+                email: email,
+                messageClass: "alert-danger"
             });
         }
     });
@@ -273,9 +278,10 @@ app.post('/signin', function (req, res) {
 
                             //Render notify.ejs with a message...
                             res.render('users/notify', {
-                                message1: `HI ${name.toUpperCase()}, YOUR REQUEST IS ALMOST READY`,
+                                message1: `Hi ${name}, your request is almost ready`,
                                 message2: `Please verify your E-mail Adress. 
-                                <a href="/signin/resendemail?email=${email}">Click here to send verification E-mail again</a>`
+                                <a href="/signin/resendemail?email=${email}">Click here to send verification E-mail again</a>`,
+                                message2Class: "alert-success"
                             });
                         });
 
@@ -333,7 +339,8 @@ app.get('/login/passwordrecovery', function (req, res) {
     } else {
         res.render('users/passwordrec/passwordrecovery', {
             email: "",
-            message: ""
+            message: "",
+            messageClass: "",
         });
     }
 });
@@ -352,8 +359,9 @@ app.post('/login/passwordrecovery', function (req, res) {
             var hash = result[0].hash;
             sendResetPassword(name, email, hash);
             res.render('users/notify', {
-                message1: "RECOVERY E-MAIL SENT",
-                message2: "Change your password"
+                message1: "Recovery E-mail sent",
+                message2: "Change your password",
+                message2Class: "alert-warning"
             });
         }
     });
@@ -373,7 +381,8 @@ app.get('/login/setnewpassword', function (req, res) {
         if (result == "") {
             res.render('users/notify', {
                 message1: "ERROR 404",
-                message2: "ERROR 404"
+                message2: "ERROR 404",
+                message2Class: "alert-danger"
             });
         } else {
             if (result[0].name == name && result[0].email == email && result[0].hash == hash) {
@@ -385,7 +394,8 @@ app.get('/login/setnewpassword', function (req, res) {
             } else {
                 res.render('users/notify', {
                     message1: "ERROR 404",
-                    message2: "ERROR 404"
+                    message2: "ERROR 404",
+                    message2Class: "alert-danger"
                 });
             }
         }
@@ -417,6 +427,7 @@ app.get('/verifyemail', function (req, res) {
             res.render('users/notify', {
                 message1: "ERROR 404",
                 message2: "ERROR 404",
+                message2Class: "alert-danger",
             });
         } else {
             //If not empty, check if all values from GET Link match the Results'
@@ -429,8 +440,9 @@ app.get('/verifyemail', function (req, res) {
                 bagodb.query(verifySql, function (error, result) {
                     if (error) throw error;
                     res.render('users/notify', {
-                        message1: "YOUR E-MAIL IS NOW VERIFIED",
-                        message2: '<a href="/login">Proceed to Log In Page</a>'
+                        message1: "Your E-mail is now verified",
+                        message2: '<a href="/login">Proceed to Log In Page</a>',
+                        message2Class: "alert-success"
                     })
                 });
 
@@ -446,7 +458,8 @@ app.get('/verifyemail', function (req, res) {
             } else {
                 res.render('users/notify', {
                     message1: "ERROR 404",
-                    message2: "ERROR 404"
+                    message2: "ERROR 404",
+                    message2Class: "alert-danger"
                 });
             }
         }

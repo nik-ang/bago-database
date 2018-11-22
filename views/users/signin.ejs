@@ -7,6 +7,8 @@
 
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<%- include('../bootstrap.html') %>
 	<link rel="stylesheet" type="text/css" href="/css/main.css">
 	<link rel="stylesheet" type="text/css" href="/css/index.css">
 	<link rel="stylesheet" type="text/css" href="/css/form.css">
@@ -30,33 +32,45 @@
 
 <body>
 	<div class="indexBackground"></div>
-		<!--________________________MAIN_______________________________________________ -->
-		<div class="main-container">
-			<div class="main-content">
-				<div>
-					<div class="formTitle">REQUEST AN ACCOUNT</div>
-					<div class="formContainer">
-						<form action="signin" method="post">
+	<!--________________________MAIN_______________________________________________ -->
+	<div class="main">
+		<div class="container">
+			<div class="display-4 formTitle">Request an Account</div>
+			<div class="formContainer">
+				<div class="form-rectangle">
+					<form action="signin" method="post">
+						<div class="form-group">
 							<label>Name & Lastname</label><br>
-							<input type="text" name="user[name]" placeholder="Name & Lastname" required autocomplete="off"><br>
+							<input type="text" class="form-control" name="user[name]" placeholder="Name & Lastname" required autocomplete="off"><br>
+						</div>
+						<div class="form-group">
 							<label>E-mail</label><br>
-							<input type="email" name="user[email]" placeholder="E-Mail Adress" required autocomplete="off"><br>
+							<input type="email" class="form-control" name="user[email]" placeholder="hello@example.com" required autocomplete="off"><br>
+						</div>
+						<div class="form-group">
 							<label>Password</label><br>
-							<input type="password" name="user[password]" placeholder="Password" required><br>
+							<input type="password" class="form-control" name="user[password]" placeholder="Password" required><br>
+						</div>
+						<div class="form-group">
 							<label>Confirm Password</label><br>
-							<input type="password" name="user[confirmpassword]" placeholder="Confirm Password" required><br>
-							<input type="submit" value="Request">
-						</form>
+							<input type="password" class="form-control" name="user[confirmpassword]" placeholder="Confirm Password" required><br>
+						</div>
+						<button type="submit" class="btn btn-primary">Request Account</button>
+					</form>
+					<div>
 						<div>Or</div>
-						<a href="login"><button>Log In</button></a>
-						<div class="message">
+						<a href="login"><button class="btn btn-primary">Log In</button></a>
+						<% if (message) { %>
+						<div class="alert alert-danger message">
 							<%- message %>
 						</div>
+						<% } %>
 					</div>
 				</div>
 			</div>
-			<!--<img src="img/net.gif" alt="Cube" class="maingif">-->
 		</div>
+	</div>
+	<!--<img src="img/net.gif" alt="Cube" class="maingif">-->
 	<!--<canvas class="particlescanvas"></canvas>
 	<script src="js/particles.js"></script>
 	<script type="text/javascript" src="js/particlesapp.js"></script>-->

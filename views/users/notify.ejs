@@ -7,11 +7,12 @@
 
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<%- include('../bootstrap.html') %>
 	<link rel="stylesheet" type="text/css" href="/css/main.css">
 	<link rel="stylesheet" type="text/css" href="/css/bagodatabase.css">
 	<link rel="stylesheet" type="text/css" href="/css/index.css">
 	<link rel="stylesheet" type="text/css" href="/css/form.css">
-	<link rel="stylesheet" type="text/css" href="/css/notify.css">
 
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -32,16 +33,18 @@
 <body>
 	<div class="indexBackground"></div>
 	<!--________________________MAIN_______________________________________________ -->
-	<div class="main-container">
-		<div class="main-content">
+	<div class="main">
+		<div class="container">
 			<div>
-				<div class="formTitle">
+				<div class="display-4 formTitle">
 					<%= message1 %>
 				</div>
 				<div class="formContainer">
-					<div class="notification2">
+					<% if (message2) { %>
+					<div class="alert <%- message2Class %> message">
 						<%- message2 %>
 					</div>
+					<% } %>
 				</div>
 			</div>
 		</div>
