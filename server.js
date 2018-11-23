@@ -56,16 +56,16 @@ app.listen(80, function () {
  */
 
 app.set('view engine', 'ejs');
+app.use(session({
+    secret: 'somessecretstuff',
+    resave: false,
+    saveUninitialized: false,
+}));
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(bodyParser.json());
-app.use(session({
-    secret: 'somessecretstuff',
-    resave: false,
-    saveUninitialized: false
-}));
 app.use(function (req, res, next) {
     if (!req.session.signedIn) {
         req.session.signedIn = false;
@@ -99,7 +99,7 @@ function sendVerificationEmail(name, email, hash, password) {
 }
 
 function sendResetPassword(name, email, hash) {
-    var ejsFile = ejs.compile(fs.readFileSync('views/resetpassword.ejs').toString());
+    var ejsFile = ejs.compile(fs.readFileSync('views/users/passwordrec/resetpassword.ejs').toString());
     var html = ejsFile({
         name: name,
         email: email,
@@ -230,7 +230,7 @@ app.post('/signin', function (req, res) {
                 message: "An account with this E-mail already exists"
             });
 
-        //If result is empty,
+            //If result is empty,
         } else {
 
             //Check if a Request with given E-mail was already registered...
@@ -246,7 +246,7 @@ app.post('/signin', function (req, res) {
                     res.render('users/signin', {
                         message: "Sorry, this account has been rejected or deleted"
                     });
-  
+
                 } else {
 
                     //First, check if the two passwords match...
@@ -285,7 +285,7 @@ app.post('/signin', function (req, res) {
                             });
                         });
 
-                    //If passwords don't match...
+                        //If passwords don't match...
                     } else {
                         res.render('users/signin', {
                             message: "Passwords don't match"
@@ -386,10 +386,17 @@ app.get('/login/setnewpassword', function (req, res) {
             });
         } else {
             if (result[0].name == name && result[0].email == email && result[0].hash == hash) {
-                res.cookie('name', name, {expire: 60000, httpOnly: false});
-                res.cookie('email', email, {expire: 60000, httpOnly: false});
-                res.render('setnewpassword', {
+                req.session.passName = name;
+                req.session.passEmail = email;
+                res.render('users/passwordrec/setnewpassword', {
                     message: "",
+                    userName: name,
+                });
+                var randomNum = Math.floor(Math.random() * 1000);
+                var newHash = md5(randomNum);
+                var changeHash = `UPDATE sig_users SET hash = "${newHash}" WHERE email ="${email}"`;
+                bagodb.query(changeHash, function (error, result) {
+                    if (error) throw error;
                 });
             } else {
                 res.render('users/notify', {
@@ -403,10 +410,35 @@ app.get('/login/setnewpassword', function (req, res) {
 });
 
 app.post('/login/setnewpassword', function (req, res) {
-
-    console.log(req.cookies);
-    res.end();
-
+    if (req.session.passName && req.session.passEmail) {
+        if (req.body.user.password == req.body.user.confirmpassword) {
+            var email = req.session.passEmail;
+            var newPassword = md5(req.body.user.password);
+            var randomNum = Math.floor(Math.random() * 1000);
+            var newHash = md5(randomNum);
+            var changePass = `UPDATE sig_users SET password = "${newPassword}" WHERE email = "${email}"`;
+            var changeHash = `UPDATE sig_users SET hash = "${newHash}" WHERE email ="${email}"`;
+            bagodb.query(changePass, function (error, result) {
+                if (error) throw error;
+            });
+            bagodb.query(changeHash, function (error, result) {
+                if (error) throw error;
+            });
+            res.render('users/notify', {
+                message1: "You have a new password",
+                message2: '<a href="/login">Proceed to Log In Page</a>',
+                message2Class: "alert-success"
+            });
+        } else {
+            bagodb.query(`SELECT * FROM sig_users WHERE email ="${req.session.passEmail}"`, function (error, result) {
+                if (error) throw error;
+                var actualHash = result[0].hash;
+                res.redirect(`/login/setnewpassword/?name=${req.session.passName}&email=${req.session.passEmail}&hash=${actualHash}`);
+            });
+        }
+    } else {
+        res.end();
+    }
 });
 
 
@@ -443,18 +475,18 @@ app.get('/verifyemail', function (req, res) {
                         message1: "Your E-mail is now verified",
                         message2: '<a href="/login">Proceed to Log In Page</a>',
                         message2Class: "alert-success"
-                    })
+                    });
                 });
 
                 //Because the correct HASH was visibile to the user, generate a new one...
                 var randomNum = Math.floor(Math.random() * 1000);
                 var newHash = md5(randomNum);
-                var updateHashSql = `UPDATE sig_users SET hash = "${newHash}" WHERE email = "${email}"`
+                var updateHashSql = `UPDATE sig_users SET hash = "${newHash}" WHERE email = "${email}"`;
                 bagodb.query(updateHashSql, function (error, result) {
                     if (error) throw error;
                 });
 
-            // If data does not match: ERROR
+                // If data does not match: ERROR
             } else {
                 res.render('users/notify', {
                     message1: "ERROR 404",
@@ -533,7 +565,7 @@ app.get('/closeup-medicos', function (req, res) {
         //Check distinct values to print as Filtering Options...
         var ATCOptions = fs.readFileSync('queries/atcoptions.sql').toString();
         var LabOptions = fs.readFileSync('queries/laboptions.sql').toString();
-        
+
         //Query the previous SQLs and render...
         bagodb.query(LabOptions, function (error, LabOptionsQ) {
             if (error) throw error;
@@ -611,7 +643,7 @@ app.get('/admindashboard', function (req, res) {
             bagodb.query('SELECT name, email FROM bagodb.sig_users WHERE allowed = 0 AND verified = 1', function (error, requestsQ) {
                 if (error) throw error;
                 //Query all requests from USERS REQUESTS
-                
+
                 /**
                  * Note, if this throws values that are not in either of the previous ones, it is
                  * because the E-mail was not verified yet...
@@ -688,7 +720,7 @@ app.post('/deleteUser', function (req, res) {
         email = req.body.email;
 
         //DELETE user buy KEEP the REQUEST REGISTERED
-         /**
+        /**
          * This E-mail will not be able to request an account again unless
          * the registered request is deleted
          */
