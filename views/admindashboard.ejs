@@ -7,6 +7,8 @@
 
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<%- include('bootstrap.html') %>
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 	<link rel="stylesheet" type="text/css" href="css/ventas.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -20,19 +22,18 @@
 	<script type="text/javascript" src="js/plotly_renderers.js"></script>
 
 	<script type="text/javascript">
-
 		$(document).ready(function () {
 
 		});
 
-		function manageUsers (action, email) {
+		function manageUsers(action, email) {
 
 			var confirmation = confirm(`Confirm Action: ${action}`);
 
 			if (!confirmation) {
 				return 0;
 			}
-			
+
 			var xhr = new XMLHttpRequest();
 
 			var postTo;
@@ -53,7 +54,7 @@
 					alert("Error");
 					return 0;
 			}
-			
+
 			xhr.onreadystatechange = function () {
 				if (this.readyState == XMLHttpRequest.DONE) {
 					location.reload();
@@ -65,94 +66,125 @@
 			xhr.send(`email=${email}`);
 
 		}
-
 	</script>
 
 </head>
 
 
 <body>
-	
-	<div class="main-grid">
-		<% admindashboard; %>
-		<%- include('header.ejs') %>
-		<!--________________________MENU_______________________________________________ -->
-		<div class="menu-grid">
-			<div class="menubar">
-				<div onclick="showReport('tab1')">Usuarios</div>
-				<div onclick="showReport('tab2')">Solicitudes de Usuarios</div>
-				<div onclick="showReport('tab3')">Status de Solicitudes</div>
-			</div>
+
+	<% admindashboard; %>
+	<%- include('header.ejs') %>
+	<!--________________________MENU_______________________________________________ -->
+
+	<nav class="navbar navbar-expand-lg navbar-dark menu">
+		<button class="navbar-toggler btn-block" type="button" data-toggle="collapse" data-target="#menuSupportedContent"
+		 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse flex-column flex-sm-row" id="menuSupportedContent">
+			<nav class="nav nav-pills flex-column flex-sm-row">
+				<a class="flex-sm-fill text-sm-center nav-link" data-toggle="pill" href="#tab1">Usuarios</a>
+				<a class="flex-sm-fill text-sm-center nav-link" data-toggle="pill" href="#tab2">Solicitudes de Usuarios</a>
+				<a class="flex-sm-fill text-sm-center nav-link" data-toggle="pill" href="#tab3">Status de Solicitudes</a>
+			</nav>
 		</div>
-		<!--________________________CONTENT___________________________________________ -->
-		<div class="main-container">
-			<div>
-				<!--________________________TABLES 1_______________________________ -->
-				<div class="table-grid" id="tab1">
-					<div class="table-title">Usuarios</div>
-					<div class="table-container" id="report1">
-						<table>
+
+	</nav>
+
+	<!--________________________CONTENT___________________________________________ -->
+
+	<!--________________________TABLES 1_______________________________ -->
+	<div class="container">
+		<div class="tab-content">
+			<div class="table-grid tab-pane fade" id="tab1">
+				<div class="table-title">Usuarios</div>
+				<div class="table-container" id="report1">
+					<table class="table table-striped table-dark">
+						<thead class="thead-light">
 							<tr>
-								<th>Nombre</th>
-								<th>E-mail</th>
-								<th>Eliminar</th>
+								<th scope="col">Nombre</th>
+								<th scope="col">E-mail</th>
+								<th scope="col">Eliminar</th>
 							</tr>
-							<% var users = JSON.parse(usersQ) %>
-							<% for (var i = 0; i < users.length; i++) { %>
-								<tr class="whiteTr">
-									<td><%= users[i].name %></td>
-									<td><%= users[i].email %></td>
-									<td><button class="deleteUser" onclick="manageUsers('deleteUser', '<%= users[i].email %>')">Borrar usuario</button></td>
-								</tr>
-							<% } %>
-						</table>
-					</div>
+						</thead>
+						<% var users = JSON.parse(usersQ) %>
+						<% for (var i = 0; i < users.length; i++) { %>
+						<tr class="whiteTr">
+							<td>
+								<%= users[i].name %>
+							</td>
+							<td>
+								<%= users[i].email %>
+							</td>
+							<td><button class="btn btn-danger" onclick="manageUsers('deleteUser', '<%= users[i].email %>')">Borrar
+									usuario</button></td>
+						</tr>
+						<% } %>
+					</table>
 				</div>
-				<!--________________________TABLES 2_______________________________ -->
-				<div class="table-grid" id="tab2">
-					<div class="table-title">Solicitudes de Usuarios</div>
-					<div class="table-container" id="report2">
-						<table>
+			</div>
+			<!--________________________TABLES 2_______________________________ -->
+			<div class="table-grid tab-pane fade" id="tab2">
+				<div class="table-title">Solicitudes de Usuarios</div>
+				<div class="table-container" id="report2">
+					<table class="table table-striped table-dark">
+						<thead class="thead-light">
 							<tr>
-								<th>Nombre</th>
-								<th>E-mail</th>
-								<th>Aceptar</th>
-								<th>Rechazar</th>
+								<th scope="col">Nombre</th>
+								<th scope="col">E-mail</th>
+								<th scope="col">Aceptar</th>
+								<th scope="col">Rechazar</th>
 							</tr>
-							<% var requests = JSON.parse(requestsQ) %>
-							<% for (var i = 0; i < requests.length; i++) { %>
-								<tr class="whiteTr">
-									<td><%= requests[i].name %></td>
-									<td><%= requests[i].email %></td>
-									<td><button class="acceptUser" onclick="manageUsers('accept', '<%= requests[i].email %>')">Aceptar Solicitud</button></td>
-									<td><button class="deleteUser" onclick="manageUsers('reject', '<%= requests[i].email %>')">Rechazar Solicitud</button></td>
-								</tr>
-							<% } %>
-						</table>
-					</div>
+						</thead>
+						<% var requests = JSON.parse(requestsQ) %>
+						<% for (var i = 0; i < requests.length; i++) { %>
+						<tr class="whiteTr">
+							<td>
+								<%= requests[i].name %>
+							</td>
+							<td>
+								<%= requests[i].email %>
+							</td>
+							<td><button class="btn btn-danger" onclick="manageUsers('accept', '<%= requests[i].email %>')">Aceptar
+									Solicitud</button></td>
+							<td><button class="btn btn-success" onclick="manageUsers('reject', '<%= requests[i].email %>')">Rechazar
+									Solicitud</button></td>
+						</tr>
+						<% } %>
+					</table>
 				</div>
-				<!--________________________TABLES 3_______________________________ -->
-				<div class="table-grid" id="tab3">
-					<div class="table-title">Status de Solicitudes</div>
-					<div class="table-container" id="report3">
-						<table>
+			</div>
+			<!--________________________TABLES 3_______________________________ -->
+			<div class="table-grid tab-pane fade" id="tab3">
+				<div class="table-title">Status de Solicitudes</div>
+				<div class="table-container" id="report3">
+					<table class="table table-striped table-dark">
+						<thead class="thead-light">
 							<tr>
-								<th>Nombre</th>
-								<th>E-mail</th>
-								<th>Status</th>
-								<th>Olvidar</th>
+								<th scope="col">Nombre</th>
+								<th scope="col">E-mail</th>
+								<th scope="col">Status</th>
+								<th scope="col">Olvidar</th>
 							</tr>
-							<% var requestsStatus = JSON.parse(requestsStatusQ) %>
-							<% for (var i = 0; i < requestsStatus.length; i++) { %>
-								<tr class="whiteTr">
-									<td><%= requestsStatus[i].name %></td>
-									<td><%= requestsStatus[i].email %></td>
-									<td><%= requestsStatus[i].status %></td>
-									<td><button class="deleteUser" onclick="manageUsers('deleteRequest', '<%= requestsStatus[i].email %>')">Borrar Usuario y Solicitud</button></td>
-								</tr>
-							<% } %>
-						</table>
-					</div>
+						</thead>
+						<% var requestsStatus = JSON.parse(requestsStatusQ) %>
+						<% for (var i = 0; i < requestsStatus.length; i++) { %>
+						<tr class="whiteTr">
+							<td>
+								<%= requestsStatus[i].name %>
+							</td>
+							<td>
+								<%= requestsStatus[i].email %>
+							</td>
+							<td>
+								<%= requestsStatus[i].status %>
+							</td>
+							<td><button class="btn btn-danger" onclick="manageUsers('deleteRequest', '<%= requestsStatus[i].email %>')">Olvidar</button></td>
+						</tr>
+						<% } %>
+					</table>
 				</div>
 			</div>
 		</div>
