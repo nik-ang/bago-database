@@ -766,9 +766,10 @@ app.post('/deleteRequest', function (req, res) {
 app.post('/emptyTable', function (req, res) {
     if (req.session.signedIn && req.session.isadmin) {
         table = req.body.table;
-        bagodb.query(`DELETE FROM ${table}`, function (error) {
+        bagodb.query(`DELETE FROM ${table}`, function(error, result) {
             if (error) throw error;
-            res.redirect('/admindashboard');
+            res.send(result.affectedRows.toString());
+            res.end()
         });
     } else {
         console.log("Action exclusive for admins");
@@ -787,13 +788,13 @@ app.post('/loadDataToTable', function (req, res) {
                 var separator = req.body.separator;
                 var path = `${__dirname.replace(/\\/g, "\\\\")}\\\\queries\\\\temporary\\\\${filename}`;
                 var sql = `LOAD DATA INFILE '${path}' INTO TABLE ${table} FIELDS TERMINATED BY '${separator}' ENCLOSED BY '"' LINES TERMINATED BY '\\r\\n'`;
-                console.log(sql);
-                bagodb.query(sql, function(error) {
+                bagodb.query(sql, function(error, result) {
                     if (error) throw error;
                     fs.unlink(`./queries/temporary/${filename}`, function(error) {
                         if (error) throw error;
                     });
-                    res.redirect('/admindashboard');
+                    res.send(result.affectedRows.toString());
+                    res.end();
                 });
             });
         }

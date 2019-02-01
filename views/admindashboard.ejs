@@ -77,19 +77,17 @@
 			}
 
 			var xhr = new XMLHttpRequest();
-
 			var postTo = "emptyTable";
 
 			xhr.onreadystatechange = function () {
 				if (this.readyState == XMLHttpRequest.DONE) {
 					location.reload();
+					alert(`${this.responseText} deleted rows`);
 				}
 			}
-
 			xhr.open("POST", postTo, true);
 			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 			xhr.send(`table=${table}`);
-
 		}
 
 		function loadDataToTable(table, data) {
@@ -112,6 +110,7 @@
 
 			xhr.onreadystatechange = function () {
 				if (this.readyState == XMLHttpRequest.DONE) {
+					alert(`${this.responseText} added rows`);
 					location.reload();
 				}
 			}
@@ -265,17 +264,26 @@
 						<tr>
 							<td>PX Report - Monthly</td>
 							<td><button class="btn btn-danger" onclick="emptyTable('pxreportmensual')">Empty</button></td>
-							<td><button class="btn btn-success" onclick="manageDatabase('load', 'pxreportmensual')">Load Data</button></td>
+							<td>
+								<input type="file" id="pxreportmensualData">
+								<button class="btn btn-success" onclick="loadDataToTable('pxreportmensual', this.previousElementSibling)">Load Data</button>
+							</td>
 						</tr>
 						<tr>
 							<td>PX Report - TAM</td>
 							<td><button class="btn btn-danger" onclick="emptyTable('pxreporttam')">Empty</button></td>
-							<td><button class="btn btn-success" onclick="manageDatabase('load', 'pxreporttam')">Load Data</button></td>
+							<td>
+								<input type="file" id="pxreporttamData">
+								<button class="btn btn-success" onclick="loadDataToTable('pxreporttam', this.previousElementSibling)">Load Data</button>
+							</td>
 						</tr>
 						<tr>
 							<td>IMS Base</td>
 							<td><button class="btn btn-danger" onclick="emptyTable('baseims')">Empty</button></td>
-							<td><button class="btn btn-success" onclick="manageDatabase('load', 'baseims')">Load Data</button></td>
+							<td>
+								<input type="file" id="baseimsData">
+								<button class="btn btn-success" onclick="loadDataToTable('baseims', this.previousElementSibling)">Load Data</button>
+							</td>
 						</tr>
 					</table>
 				</div>
