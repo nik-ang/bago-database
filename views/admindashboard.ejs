@@ -66,6 +66,60 @@
 			xhr.send(`email=${email}`);
 
 		}
+
+
+		function emptyTable(table) {
+
+			var confirmation = confirm(`Are you sure you want to empty ${table}?`);
+
+			if (!confirmation) {
+				return 0;
+			}
+
+			var xhr = new XMLHttpRequest();
+
+			var postTo = "emptyTable";
+
+			xhr.onreadystatechange = function () {
+				if (this.readyState == XMLHttpRequest.DONE) {
+					location.reload();
+				}
+			}
+
+			xhr.open("POST", postTo, true);
+			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+			xhr.send(`table=${table}`);
+
+		}
+
+		function loadDataToTable(table, data) {
+
+			var confirmation = confirm(`Are you sure you want to load data to ${table}? Origin table must be CSV`);
+
+			if (!confirmation) {
+				return 0;
+			}
+
+			var separator = prompt('Please insert CSV separator: ";" or ","');
+
+			var formData = new FormData();
+			formData.append("file", data.files[0], data.id);
+			formData.append("table", table);
+			formData.append("separator", separator);
+
+			var xhr = new XMLHttpRequest();
+			var postTo = "loadDataToTable";
+
+			xhr.onreadystatechange = function () {
+				if (this.readyState == XMLHttpRequest.DONE) {
+					location.reload();
+				}
+			}
+
+			xhr.open("POST", postTo, true);
+			xhr.send(formData);
+
+		}
 	</script>
 
 </head>
@@ -88,6 +142,7 @@
 				<a class="flex-sm-fill text-sm-center nav-link" data-toggle="pill" href="#tab1">Usuarios</a>
 				<a class="flex-sm-fill text-sm-center nav-link" data-toggle="pill" href="#tab2">Solicitudes de Usuarios</a>
 				<a class="flex-sm-fill text-sm-center nav-link" data-toggle="pill" href="#tab3">Status de Solicitudes</a>
+				<a class="flex-sm-fill text-sm-center nav-link" data-toggle="pill" href="#tab4">Bases SQL</a>
 			</nav>
 		</div>
 
@@ -184,6 +239,44 @@
 							<td><button class="btn btn-danger" onclick="manageUsers('deleteRequest', '<%= requestsStatus[i].email %>')">Olvidar</button></td>
 						</tr>
 						<% } %>
+					</table>
+				</div>
+			</div>
+			<!--________________________TABLES 4_______________________________ -->
+			<div class="table-grid tab-pane fade" id="tab4">
+				<div class="table-title">Bases SQL</div>
+				<div class="table-container" id="report4">
+					<table class="table table-striped table-dark">
+						<thead class="thead-light">
+							<tr>
+								<th scope="col">Base</th>
+								<th scope="col">Empty</th>
+								<th scope="col">Load Data</th>
+							</tr>
+						</thead>
+						<tr>
+							<td>Ventas</td>
+							<td><button class="btn btn-danger" onclick="emptyTable('ventas')">Empty</button></td>
+							<td>
+								<input type="file" id="ventasData">
+								<button class="btn btn-success" onclick="loadDataToTable('ventas', this.previousElementSibling)">Load Data</button>
+							</td>
+						</tr>
+						<tr>
+							<td>PX Report - Monthly</td>
+							<td><button class="btn btn-danger" onclick="emptyTable('pxreportmensual')">Empty</button></td>
+							<td><button class="btn btn-success" onclick="manageDatabase('load', 'pxreportmensual')">Load Data</button></td>
+						</tr>
+						<tr>
+							<td>PX Report - TAM</td>
+							<td><button class="btn btn-danger" onclick="emptyTable('pxreporttam')">Empty</button></td>
+							<td><button class="btn btn-success" onclick="manageDatabase('load', 'pxreporttam')">Load Data</button></td>
+						</tr>
+						<tr>
+							<td>IMS Base</td>
+							<td><button class="btn btn-danger" onclick="emptyTable('baseims')">Empty</button></td>
+							<td><button class="btn btn-success" onclick="manageDatabase('load', 'baseims')">Load Data</button></td>
+						</tr>
 					</table>
 				</div>
 			</div>

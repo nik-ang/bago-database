@@ -8,6 +8,7 @@ const nodemailer = require('nodemailer');
 const md5 = require('md5');
 const stream = require('stream');
 const ejs = require('ejs');
+const upload = require('express-fileupload');
 
 /**
  * DATABASE CONNECTION
@@ -39,7 +40,7 @@ const mailer = nodemailer.createTransport({
     },
     auth: {
         user: 'analistamarketing@bago.com.py',
-        pass: 'maildeNico2018'
+        pass: 'maildeNico2019'
     }
 });
 
@@ -75,6 +76,7 @@ app.use(function (req, res, next) {
     }
     next();
 });
+app.use(upload());
 
 function sendVerificationEmail(name, email, hash, password) {
 
@@ -514,6 +516,7 @@ app.get('/', function (req, res) {
 
 
 //VENTAS: GET
+
 app.get('/ventas', function (req, res) {
 
     if (req.session.signedIn) {
@@ -681,7 +684,7 @@ app.post('/acceptUserRequest', function (req, res) {
             });
         });
     } else {
-        console.log("Not an Admin");
+        console.log("Action exclusive for admins");
         res.end();
     }
 });
@@ -707,7 +710,7 @@ app.post('/rejectUserRequest', function (req, res) {
             });
         });
     } else {
-        console.log("Not an Admin");
+        console.log("Action exclusive for admins");
         res.end();
     }
 });
@@ -732,7 +735,7 @@ app.post('/deleteUser', function (req, res) {
             });
         });
     } else {
-        console.log("Not an Admin");
+        console.log("Action exclusive for admins");
         res.end();
     }
 });
@@ -752,7 +755,50 @@ app.post('/deleteRequest', function (req, res) {
             });
         });
     } else {
-        console.log("Not an Admin");
+        console.log("Action exclusive for admins");
+        res.end();
+    }
+});
+
+//EMPTY DATA TABLE
+//ONLY POST AND EXCLUSIVE FOR ADMINS
+
+app.post('/emptyTable', function (req, res) {
+    if (req.session.signedIn && req.session.isadmin) {
+        table = req.body.table;
+        bagodb.query(`DELETE FROM ${table}`, function (error) {
+            if (error) throw error;
+            res.redirect('/admindashboard');
+        });
+    } else {
+        console.log("Action exclusive for admins");
+        res.end();
+    }
+});
+
+app.post('/loadDataToTable', function (req, res) {
+    if (req.session.signedIn && req.session.isadmin) {
+        if (req.files) {
+            var file = req.files.file;
+            var filename = file.name;
+            file.mv(`./queries/temporary/${filename}`, function (error) {
+                if (error) throw error;
+                var table = req.body.table;
+                var separator = req.body.separator;
+                var path = `${__dirname.replace(/\\/g, "\\\\")}\\\\queries\\\\temporary\\\\${filename}`;
+                var sql = `LOAD DATA INFILE '${path}' INTO TABLE ${table} FIELDS TERMINATED BY '${separator}' ENCLOSED BY '"' LINES TERMINATED BY '\\r\\n'`;
+                console.log(sql);
+                bagodb.query(sql, function(error) {
+                    if (error) throw error;
+                    fs.unlink(`./queries/temporary/${filename}`, function(error) {
+                        if (error) throw error;
+                    });
+                    res.redirect('/admindashboard');
+                });
+            });
+        }
+    } else {
+        console.log("Action exclusive for admins");
         res.end();
     }
 });
