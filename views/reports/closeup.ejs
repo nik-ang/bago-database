@@ -26,10 +26,10 @@
 			var renderers = $.extend($.pivotUtilities.renderers, $.pivotUtilities.plotly_renderers, $.pivotUtilities.subtotal_renderers);
 			var aggregators = $.extend($.pivotUtilities.subtotal_aggregators, $.pivotUtilities.aggregators);
 
-			var sqlCloseup = ('<%- sqlCloseup %>');
+			var queryResult = ('<%- queryResult %>');
 
 			$("#report1").pivotUI(
-				JSON.parse(sqlCloseup), {
+				JSON.parse(queryResult), {
 					dataClass: dataClass,
 					aggregators: aggregators,
 					rows: ['Lab'],
@@ -45,7 +45,7 @@
 			);
 
 			$("#report2").pivotUI(
-				JSON.parse(sqlCloseup), {
+				JSON.parse(queryResult), {
 					dataClass: dataClass,
 					aggregators: aggregators,
 					rows: ['Product', 'Molecule', 'ATC'],
@@ -68,7 +68,7 @@
 			);
 
 			$("#report3").pivotUI(
-				JSON.parse(sqlCloseup), {
+				JSON.parse(queryResult), {
 					dataClass: dataClass,
 					aggregators: aggregators,
 					rows: ['ATC', 'Product'],

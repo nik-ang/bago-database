@@ -1,21 +1,21 @@
 const express = require('express');
-const app = express();
+const app = module.exports.app = express();
 const mysql = require('mysql');
 const fs = require('fs');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const nodemailer = require('nodemailer');
 const md5 = require('md5');
-const stream = require('stream');
 const ejs = require('ejs');
 const upload = require('express-fileupload');
+const Report = require('./controllers/reports/reportClass');
+const LongReport = require('./controllers/reports/longReportClass');
 
 /**
  * DATABASE CONNECTION
  */
 
-
-const bagodb = mysql.createConnection({
+const bagodb = module.exports.bagodb = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "",
@@ -514,50 +514,24 @@ app.get('/', function (req, res) {
     }
 });
 
+//VENTAS
+var ventas = new Report('ventas', 'sales.sql');
+ventas.handleRequest();
 
-//VENTAS: GET
+//CLOSEUP
+var closeup = new Report('closeup', 'closeup.sql');
+closeup.handleRequest();
 
-app.get('/ventas', function (req, res) {
-
-    if (req.session.signedIn) {
-        var sqlSales = fs.readFileSync('queries/sales.sql').toString();
-
-        bagodb.query(sqlSales, function (error, sqlSalesQ) {
-            if (error) throw error;
-            sqlSales = JSON.stringify(sqlSalesQ);
-            res.render(
-                'reports/ventas.ejs', {
-                    sqlSales: sqlSales,
-                    admindashboard: req.session.isadmin
-                }
-            );
-        });
-    } else {
-        res.redirect('login');
+//CLOSEUP-MEDICOS
+var closeupmedicos = new LongReport('closeup-medicos', 'closeup-medicos.sql', false, 'desc_labo', 'Bago');
+closeupmedicos.setFilerList(
+    {
+        ATCOptions: 'atcoptions.sql',
+        LabOptions: 'laboptions.sql',
     }
-});
-
-//CLOSEUP: GET
-app.get('/closeup', function (req, res) {
-
-    if (req.session.signedIn) {
-        var sqlCloseup = fs.readFileSync('queries/closeup.sql').toString();
-        bagodb.query(sqlCloseup, function (error, sqlCloseupQ) {
-            if (error) throw error;
-            sqlCloseup = JSON.stringify(sqlCloseupQ);
-            res.render(
-                'reports/closeup.ejs', {
-                    sqlCloseup: sqlCloseup,
-                    admindashboard: req.session.isadmin
-                }
-            );
-        });
-    } else {
-        res.redirect('login');
-    }
-});
-
-//CLOSEUP-MEDICOS: GET
+)
+closeupmedicos.handleRequest();
+/*
 app.get('/closeup-medicos', function (req, res) {
 
     if (req.session.signedIn) {
@@ -594,7 +568,7 @@ app.get('/closeup-medicos', function (req, res) {
         res.redirect('login');
     }
 });
-
+*/
 //CLOSEUP-MEDICOS: POST
 app.post('/closeup-medicos', function (req, res) {
     if (req.session.signedIn) {
@@ -617,22 +591,8 @@ app.post('/closeup-medicos', function (req, res) {
 });
 
 //IMS: GET
-app.get('/ims', function (req, res) {
-
-    if (req.session.signedIn) {
-        var sqlIms = fs.readFileSync('queries/ims.sql').toString();
-        bagodb.query(sqlIms, function (error, sqlImsQ) {
-            if (error) throw error;
-            sqlIms = JSON.stringify(sqlImsQ);
-            res.render('reports/ims.ejs', {
-                sqlIms: sqlIms,
-                admindashboard: req.session.isadmin
-            });
-        });
-    } else {
-        res.redirect('login');
-    }
-});
+var ims = new Report('ims', 'ims.sql');
+ims.handleRequest();
 
 //ADMINDASHBOARD: GET
 //EXCLUSIVE FOR ADMINS

@@ -28,9 +28,9 @@
 			var renderers = $.extend($.pivotUtilities.renderers, $.pivotUtilities.plotly_renderers, $.pivotUtilities.subtotal_renderers);
 			var aggregators = $.extend($.pivotUtilities.subtotal_aggregators, $.pivotUtilities.aggregators);
 
-			var sqlSales = ('<%- sqlSales %>');
+			var queryResult = ('<%- queryResult %>');
 			$("#report1").pivotUI(
-				JSON.parse(sqlSales), {
+				JSON.parse(queryResult), {
 					dataClass: dataClass,
 					aggregators: aggregators,
 					cols: ['Year', 'Month'],
@@ -41,7 +41,7 @@
 			);
 
 			$("#report2").pivotUI(
-				JSON.parse(sqlSales), {
+				JSON.parse(queryResult), {
 					dataClass: dataClass,
 					aggregators: aggregators,
 					rows: ['Product'],
@@ -58,7 +58,7 @@
 			);
 
 			$("#report3").pivotUI(
-				JSON.parse(sqlSales), {
+				JSON.parse(queryResult), {
 					dataClass: dataClass,
 					aggregators: aggregators,
 					rows: ['Client'],

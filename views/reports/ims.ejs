@@ -27,10 +27,10 @@
 			var renderers = $.extend($.pivotUtilities.renderers, $.pivotUtilities.plotly_renderers, $.pivotUtilities.subtotal_renderers);
 			var aggregators = $.extend($.pivotUtilities.subtotal_aggregators, $.pivotUtilities.aggregators);
 
-			var sqlIms = ('<%- sqlIms %>');
+			var queryResult = ('<%- queryResult %>');
 
 			$("#report1").pivotUI(
-				JSON.parse(sqlIms), {
+				JSON.parse(queryResult), {
 					dataClass: dataClass,
 					aggregators: aggregators,
 					rows: ['Laboratories'],
@@ -47,7 +47,7 @@
 			);
 
 			$("#report2").pivotUI(
-				JSON.parse(sqlIms), {
+				JSON.parse(queryResult), {
 					dataClass: dataClass,
 					aggregators: aggregators,
 					rows: ['Product', 'ATC', 'Molecule'],
@@ -68,7 +68,7 @@
 			);
 
 			$("#report3").pivotUI(
-				JSON.parse(sqlIms), {
+				JSON.parse(queryResult), {
 					dataClass: dataClass,
 					aggregators: aggregators,
 					rows: ['ATCName'],
